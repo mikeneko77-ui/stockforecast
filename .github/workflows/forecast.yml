@@ -1,14 +1,72 @@
 name: Daily Forecast
 
 on:
+  schedule:
+    - cron: "0 15 * * 1-5" # JST 0:00 (weekdays)
   workflow_dispatch:
+    inputs:
+      model_size:
+        description: "Chronos model size"
+        default: "bolt-small"
+        type: choice
+        options: [bolt-small, bolt-base, tiny, small, base]
+  push:
+    paths: ["config/tickers.json", "scripts/**"]
+
+permissions:
+  contents: write
+
+env:
+  PYTHON_VERSION: "3.11"
+  HF_HOME: /home/runner/.cache/huggingface
 
 jobs:
   forecast:
     runs-on: ubuntu-latest
+    timeout-minutes: 30
+
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
-          python-version: "3.11"
-      - run: echo "MVP0 - CI/CD skeleton ready"
+          python-version: ${{ env.PYTHON_VERSION }}
+
+      - uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements.txt') }}
+
+      - uses: actions/cache@v4
+        with:
+          path: ${{ env.HF_HOME }}
+          key: ${{ runner.os }}-hf-${{ github.event.inputs.model_size || 'bolt-small' }}
+
+      - name: Install dependencies
+        run: pip install -r scripts/requirements.txt
+
+      - name: Run forecast
+        run: |
+          python scripts/train_and_forecast.py \
+            --config config/tickers.json \
+            --output forecasts \
+            --model-size "${{ github.event.inputs.model_size || 'bolt-small' }}" \
+            --no-supabase
+
+      - name: Show results
+        run: cat forecasts/AAPL.json | python -m json.tool
+
+      - name: Commit results
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add forecasts/
+          git diff --cached --quiet && echo "No changes" && exit 0
+          git commit -m "forecast: $(date -u +'%Y-%m-%d %H:%M UTC')"
+          git push
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: forecasts-${{ github.run_number }}
+          path: forecasts/
+          retention-days: 30
