@@ -1,0 +1,11 @@
+{
+    "tickers": {
+      "AAPL": { "name": "Apple Inc.", "shares": 50 }
+    },
+    "forecast_config": {
+      "history_days": 730,
+      "forecast_horizon": 60,
+      "num_samples": 500
+    }
+  }
+  
