@@ -55,7 +55,7 @@ def ensure_stock_exists(sb, symbol: str, name: str):
     except Exception as e:
         logger.warning(f"  Stock upsert waiting for {symbol}: {e}")
 
-def upsert_forecast_to_supabase(
+def upsert_forecasts_to_supabase(
     sb, symbol: str, run_data: str, close_price: float,
     quantiles: dict, horizon: int, model_name: str):
     if sb is None:
