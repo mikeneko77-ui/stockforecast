@@ -2,9 +2,9 @@
 import os
 try:
     from supabase import create_client
-    HAS_SPABASE = True
+    HAS_SUPABASE = True
 except:
-    HAS_SPABASE = False
+    HAS_SUPABASE = False
 
 import json
 import argparse
@@ -67,7 +67,7 @@ def upsert_forecasts_to_supabase(
     for i, td in enumerate(target_dates):
         rows.append({
             "run_date": run_date,
-            "target_date": td.strftime('%Y-%md-%d'),
+            "target_date": td.strftime('%Y-%m-%d'),
             "symbol": symbol,
             "close": float(close_price),
             "mean": float(quantiles["mean"][i]),
@@ -77,6 +77,18 @@ def upsert_forecasts_to_supabase(
             "p75": float(quantiles["p75"][i]),
             "model": model_name,
         })
+
+    BATCH_SIZE = 50
+    for start in range(0, len(rows), BATCH_SIZE):
+        batch = rows[start:start + BATCH_SIZE]
+        try:
+            sb.table("forecasts").upsert(
+                batch, on_conflict="target_date,symbol"
+            ).execute()
+        except Exception as e:
+            logger.error(f"  Supabase upsert error for {symbol}: {e}")
+            return
+    logger.info(f"  Supabase: upserted {len(rows)} forecast rows for {symbol}")
 
 
 def fetch_stock_data(ticker: str, days: int = 730) -> pd.DataFrame | None:
@@ -160,7 +172,7 @@ def main():
     args = parser.parse_args()
 
     sb = None
-    if not args.no_supabase and HAS_SPABASE:
+    if not args.no_supabase and HAS_SUPABASE:
         sb = get_supabase()
         if sb:
             logger.info("Supabase: connected")
