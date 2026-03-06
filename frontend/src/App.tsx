@@ -16,7 +16,7 @@ import {
   type PortfolioRow,
 } from "./lib/portfolios";
 
-import { fetchForecasts, ForecastRow } from "./lib/forecasts";
+import { fetchForecasts, type ForecastRow } from "./lib/forecasts";
 import { Area } from "recharts";
 
 interface ChartPoint {
@@ -34,24 +34,8 @@ interface StockData {
   history: { dates: string[]; prices: number[] };
 }
 
-const DEMO: StockData = {
-  ticker: "AAPL",
-  name: "Apple Inc.",
-  current_price: 195,
-  history: {
-    dates: Array.from({ length: 90 }, (_, i) => {
-      const d = new Date();
-      d.setDate(d.getDate() - (90 - i));
-      return d.toISOString().split("T")[0];
-    }),
-    prices: Array.from({ length: 90 }, (_, i) => {
-      return 180 + Math.sin(i / 10) * 10 + i * 0.1 + Math.random() * 3;
-    }),
-  },
-};
-
 export default function App() {
-  const [data] = useState<StockData>(DEMO);
+  const [data, setData] = useState<StockData | null>(null);
   const [portofolios, setPortfolios] = useState<PortfolioRow[]>([]);
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
@@ -59,31 +43,45 @@ export default function App() {
   const [forecasts, setForecasts] = useState<ForecastRow[]>([]);
 
   useEffect(() => {
+    // 実績データを forecasts/AAPL.json から取得
+    fetch("/forecasts/AAPL.json")
+      .then((res) => res.json())
+      .then((json) => {
+        setData({
+          ticker: json.ticker,
+          name: json.name,
+          current_price: json.current_price,
+          history: json.history,
+        });
+      })
+      .catch((e) => setError(`株価データの取得に失敗: ${e.message}`));
+
+    // 予測データを Supabase から取得
     fetchForecasts("AAPL")
       .then(setForecasts)
       .catch((e) => setError(e.message));
   }, []);
 
-  const historyPoints: ChartPoint[] = data.history.dates.map((date, i) => ({
-    date,
-    price: Math.round(data.history.prices[i] * 100) / 100,
-  }));
+  const historyPoints: ChartPoint[] = data
+    ? data.history.dates.map((date, i) => ({
+        date,
+        price: Math.round(data.history.prices[i] * 100) / 100,
+      }))
+    : [];
 
   const lastHistory = historyPoints[historyPoints.length - 1];
-  const forecastPoints: ChartPoint[] = [
-    { date: lastHistory.date, forecast: lastHistory.price },
-    ...forecasts.map((f) => ({
-      date: f.target_date,
-      forecast: Math.round(f.mean * 100) / 100,
-      upper: Math.round(f.upper * 100) / 100,
-      lower: Math.round(f.lower * 100) / 100,
-    })),
-  ];
+  const forecastPoints: ChartPoint[] = lastHistory
+    ? [
+        { date: lastHistory.date, forecast: lastHistory.price },
+        ...forecasts.map((f) => ({
+          date: f.target_date,
+          forecast: Math.round(f.mean * 100) / 100,
+          upper: Math.round(f.upper * 100) / 100,
+          lower: Math.round(f.lower * 100) / 100,
+        })),
+      ]
+    : [];
   const chartData = [...historyPoints, ...forecastPoints.slice(1)];
-  // const chartData = data.history.dates.map((date, i) => ({
-  //   date,
-  //   price: Math.round(data.history.prices[i] * 100) / 100,
-  // }));
 
   const loadPortfolios = useCallback(async () => {
     try {
@@ -131,12 +129,12 @@ export default function App() {
           <div className="flex justify-between items-baseline mb-4">
             <div>
               <span className="font-mono font-bold text-gray-900">
-                {data.ticker}
+                {data?.ticker ?? "Loading..."}
               </span>
-              <span className="text-sm text-gray-500 ml-2">{data.name}</span>
+              <span className="text-sm text-gray-500 ml-2">{data?.name}</span>
             </div>
             <span className="font-mono text-lg font-bold text-gray-900">
-              ${data.current_price.toFixed(2)}
+              {data ? `$${data.current_price.toFixed(2)}` : ""}
             </span>
           </div>
 
