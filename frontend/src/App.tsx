@@ -16,6 +16,17 @@ import {
   type PortfolioRow,
 } from "./lib/portfolios";
 
+import { fetchForecasts, ForecastRow } from "./lib/forecasts";
+import { Area } from "recharts";
+
+interface ChartPoint {
+  date: string;
+  price?: number;
+  forecast?: number;
+  upper?: number;
+  lower?: number;
+}
+
 interface StockData {
   ticker: string;
   name: string;
@@ -45,10 +56,34 @@ export default function App() {
   const [newName, setNewName] = useState("");
   const [error, setError] = useState("");
 
-  const chartData = data.history.dates.map((date, i) => ({
+  const [forecasts, setForecasts] = useState<ForecastRow[]>([]);
+
+  useEffect(() => {
+    fetchForecasts("AAPL")
+      .then(setForecasts)
+      .catch((e) => setError(e.message));
+  }, []);
+
+  const historyPoints: ChartPoint[] = data.history.dates.map((date, i) => ({
     date,
     price: Math.round(data.history.prices[i] * 100) / 100,
   }));
+
+  const lastHistory = historyPoints[historyPoints.length - 1];
+  const forecastPoints: ChartPoint[] = [
+    { date: lastHistory.date, forecast: lastHistory.price },
+    ...forecasts.map((f) => ({
+      date: f.target_date,
+      forecast: Math.round(f.mean * 100) / 100,
+      upper: Math.round(f.upper * 100) / 100,
+      lower: Math.round(f.lower * 100) / 100,
+    })),
+  ];
+  const chartData = [...historyPoints, ...forecastPoints.slice(1)];
+  // const chartData = data.history.dates.map((date, i) => ({
+  //   date,
+  //   price: Math.round(data.history.prices[i] * 100) / 100,
+  // }));
 
   const loadPortfolios = useCallback(async () => {
     try {
@@ -117,6 +152,32 @@ export default function App() {
                 stroke="#059669"
                 dot={false}
                 strokeWidth={2}
+                name="実績"
+              />
+              <Line
+                type="monotone"
+                dataKey="forecast"
+                stroke="#2563eb"
+                dot={false}
+                strokeWidth={2}
+                strokeDasharray="6 3"
+                name="予測"
+              />
+              <Area
+                type="monotone"
+                dataKey="upper"
+                stroke="none"
+                fill="#2563eb"
+                fillOpacity={0.1}
+                name="上限"
+              />
+              <Area
+                type="monotone"
+                dataKey="lower"
+                stroke="none"
+                fill="#2563eb"
+                fillOpacity={0.1}
+                name="下限"
               />
             </ComposedChart>
           </ResponsiveContainer>
