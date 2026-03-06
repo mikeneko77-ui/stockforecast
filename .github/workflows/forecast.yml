@@ -51,7 +51,6 @@ jobs:
             --config config/tickers.json \
             --output forecasts \
             --model-size "${{ github.event.inputs.model_size || 'bolt-small' }}" \
-            --no-supabase
 
       - name: Show results
         run: cat forecasts/AAPL.json | python -m json.tool

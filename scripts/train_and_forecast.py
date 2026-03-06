@@ -1,4 +1,10 @@
 #!/usr/bin/env python3
+import os
+try:
+    from supabase import create_client
+    HAS_SPABASE = True
+except:
+    HAS_SPABASE = False
 
 import json
 import argparse
@@ -29,6 +35,49 @@ CHRONOS_MODELS = {
     "bolt-small": "amazon/chronos-bolt-small",
     "bolt-base":  "amazon/chronos-bolt-base",
 }
+
+def get_supabase():
+    url = os.environ.get("SUPABASE_URL")
+    key = os.environ.get("SUPABASE_SERVICE_ROLE_KEY") or os.environ.get("SUPABASE_KEY")
+    if not url or not key:
+        logger.warning("SUPABASE_URL / SUPABASE_KEY not set")
+        return None
+    return create_client(url, key)
+
+def ensure_stock_exists(sb, symbol: str, name: str):
+    if sb is None:
+        return
+    try:
+        sb.table("stocks").upsert(
+            {"symbol": symbol, "name": name, "is_active": True},
+            on_conflict="symbol"
+        ).execute()
+    except Exception as e:
+        logger.warning(f"  Stock upsert waiting for {symbol}: {e}")
+
+def upsert_forecast_to_supabase(
+    sb, symbol: str, run_data: str, close_price: float,
+    quantiles: dict, horizon: int, model_name: str):
+    if sb is None:
+        return
+    base = pd.Timestamp(run_date)
+    target_dates = pd.bdate_range(start=base + pd.offsets.BDay(1), periods=horizon)
+
+    rows = []
+    for i, td in enumerate(target_dates):
+        row.append({
+            "run_date": run_date,
+            "target_date": td.strftime('%Y-%md-%d'),
+            "symbol": symbol,
+            "close": float(close_price),
+            "mean": float(quantiles["mean"][i]),
+            "upper": float(quantiles["upper"][i]),
+            "lower": float(quantiles["lower"][i]),
+            "p25": float(quantiles["p25"][i]),
+            "p75": float(quantiles["p75"][i]),
+            "model": model_name,
+        })
+
 
 def fetch_stock_data(ticker: str, days: int = 730) -> pd.DataFrame | None:
     end = datetime.now()
@@ -110,6 +159,12 @@ def main():
     parser.add_argument("--no-supabase", action="store_true")
     args = parser.parse_args()
 
+    sb = None
+    if not args.no_supabase and HAS_SPABASE:
+        sb = get_supabase()
+        if sb:
+            logger.info("Supabase: connected")
+
     with open(args.config) as f:
         config = json.load(f)
 
@@ -141,6 +196,7 @@ def main():
         
         prices = df["close"].values
         current_price = float(prices[-1])
+        run_date = df.index[-1].strftime("%Y-%m-%d")
 
         # Forecast
         t0 = time.time()
@@ -178,6 +234,13 @@ def main():
                 "prices": df["close"].tolist()[-90:],
             },
         }
+
+        if sb:
+            ensure_stock_exists(sb, ticker, info["name"])
+            upsert_forecasts_to_supabase(
+                sb, ticker, run_date, current_price,
+                quantiles, horizon, used_model
+            )
 
         path = output_dir / f"{ticker}.json"
         with open(path, "w") as f:
