@@ -1,11 +1,14 @@
 {
-    "tickers": {
-      "AAPL": { "name": "Apple Inc.", "shares": 50 }
-    },
-    "forecast_config": {
-      "history_days": 730,
-      "forecast_horizon": 60,
-      "num_samples": 500
-    }
+  "tickers": {
+    "AAPL": { "name": "Apple Inc.", "shares": 50 },
+    "GOOGL": { "name": "Alphabet Inc.", "shares": 20 },
+    "MSFT": { "name": "Microsoft Corp.", "shares": 40 },
+    "AMZN": { "name": "Amazon.com Inc.", "shares": 30 },
+    "NVDA": { "name": "NVIDIA Corp.", "shares": 25 }
+  },
+  "forecast_config": {
+    "history_days": 730,
+    "forecast_horizon": 60,
+    "num_samples": 500
   }
-  
+}

@@ -1,4 +1,4 @@
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect } from "react";
 import {
   Line,
   XAxis,
@@ -14,6 +14,10 @@ import {
   createPortfolios,
   deletePortfolio,
   type PortfolioRow,
+  type PortfolioForecastRow,
+  type HoldingRow,
+  fetchHoldings,
+  fetchPortfolioForecasts,
 } from "./lib/portfolios";
 
 import { fetchForecasts, type ForecastRow } from "./lib/forecasts";
@@ -60,7 +64,28 @@ export default function App() {
     fetchForecasts("AAPL")
       .then(setForecasts)
       .catch((e) => setError(e.message));
+
+    // ポートフォリオ一覧を取得
+    fetchPortfolios()
+      .then(setPortfolios)
+      .catch((e: Error) => setError(e.message));
   }, []);
+
+  const [selectedPortfolio, setSselectedPortfolio] = useState<string | null>(
+    null
+  );
+  const [holdings, setHoldings] = useState<HoldingRow[]>([]);
+  const [pfForecasts, setPfForecasts] = useState<PortfolioForecastRow[]>([]);
+
+  const handleSelect = async (id: string) => {
+    setSselectedPortfolio(id);
+    const [h, f] = await Promise.all([
+      fetchHoldings(id),
+      fetchPortfolioForecasts(id),
+    ]);
+    setHoldings(h);
+    setPfForecasts(f);
+  };
 
   const historyPoints: ChartPoint[] = data
     ? data.history.dates.map((date, i) => ({
@@ -83,18 +108,14 @@ export default function App() {
     : [];
   const chartData = [...historyPoints, ...forecastPoints.slice(1)];
 
-  const loadPortfolios = useCallback(async () => {
+  const loadPortfolios = async () => {
     try {
       const p = await fetchPortfolios();
       setPortfolios(p);
     } catch (e: any) {
       setError(e.message);
     }
-  }, []);
-
-  useEffect(() => {
-    loadPortfolios();
-  }, [loadPortfolios]);
+  };
 
   const handleCreate = async () => {
     if (!newName.trim()) return;
@@ -224,7 +245,12 @@ export default function App() {
               {portofolios.map((p) => (
                 <div
                   key={p.id}
-                  className="flex items-center justify-between p-3 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+                  onClick={() => handleSelect(p.id)}
+                  className={`flex items-center justify-between p-3 rounded-lg cursor-pointer transition-colors ${
+                    selectedPortfolio === p.id
+                      ? "bg-blue-50 border border-blue-200"
+                      : "bg-gray-50 hover:bg-gray-100"
+                  }`}
                 >
                   <div>
                     <div className="font-mono text-sm font-semibold text-gray-800">
@@ -243,6 +269,78 @@ export default function App() {
                   </button>
                 </div>
               ))}
+            </div>
+          )}
+
+          {selectedPortfolio && holdings.length > 0 && (
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              <h3 className="font-mono text-xs font-bold text-gray-500 mb-2">
+                構成銘柄
+              </h3>
+              <table className="w-full text-sm">
+                <thead>
+                  <tr className="text-left text-xs text-gray-400 font-mono">
+                    <th className="pb-2">銘柄</th>
+                    <th className="pb-2 text-right">比率</th>
+                    <th className="pb-2 text-right">配分額</th>
+                    <th className="pb-2 text-right">株数</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {holdings.map((h) => (
+                    <tr key={h.symbol} className="border-t border-gray-100">
+                      <td className="py-2 font-mono font-semibold">{h.symbol}</td>
+                      <td className="py-2 text-right font-mono">
+                        {(h.weight * 100).toFixed(1)}%
+                      </td>
+                      <td className="py-2 text-right font-mono">
+                        ${h.allocated_value.toLocaleString()}
+                      </td>
+                      <td className="py-2 text-right font-mono">{h.shares}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          )}
+
+          {selectedPortfolio && pfForecasts.length > 0 && (
+            <div className="mt-4 border-t border-gray-200 pt-4">
+              <h3 className="font-mono text-xs font-bold text-gray-500 mb-2">
+                ポートフォリオ予測
+              </h3>
+              <ResponsiveContainer width="100%" height={300}>
+                <ComposedChart data={pfForecasts}>
+                  <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
+                  <XAxis dataKey="target_date" tick={{ fontSize: 10 }} />
+                  <YAxis domain={["auto", "auto"]} tick={{ fontSize: 10 }} />
+                  <Tooltip />
+                  <Line
+                    type="monotone"
+                    dataKey="value_mean"
+                    stroke="#2563eb"
+                    dot={false}
+                    strokeWidth={2}
+                    name="予測値"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="value_upper"
+                    stroke="none"
+                    fill="#2563eb"
+                    fillOpacity={0.1}
+                    name="上限"
+                  />
+                  <Area
+                    type="monotone"
+                    dataKey="value_lower"
+                    stroke="none"
+                    fill="#2563eb"
+                    fillOpacity={0.1}
+                    name="下限"
+                  />
+                </ComposedChart>
+              </ResponsiveContainer>
             </div>
           )}
         </div>

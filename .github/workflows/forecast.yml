@@ -10,6 +10,18 @@ on:
         default: "bolt-small"
         type: choice
         options: [bolt-small, bolt-base, tiny, small, base]
+      budget:
+        description: "Portfolio budget (USD)"
+        default: "100000"
+        type: string
+      target_return_min:
+        description: "Min target return (%)"
+        default: "2.0"
+        type: string
+      target_return_max:
+        description: "Max target return (%)"
+        default: "10.0"
+        type: string
   push:
     paths: ["config/tickers.json", "scripts/**"]
 
@@ -19,41 +31,49 @@ permissions:
 env:
   PYTHON_VERSION: "3.11"
   HF_HOME: /home/runner/.cache/huggingface
+  SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+  SUPABASE_SERVICE_ROLE_KEY: ${{ secrets.SUPABASE_SERVICE_ROLE_KEY }}
 
 jobs:
   forecast:
     runs-on: ubuntu-latest
     timeout-minutes: 30
-
     steps:
       - uses: actions/checkout@v4
-
       - uses: actions/setup-python@v5
         with:
           python-version: ${{ env.PYTHON_VERSION }}
-
       - uses: actions/cache@v4
         with:
           path: ~/.cache/pip
           key: ${{ runner.os }}-pip-${{ hashFiles('scripts/requirements.txt') }}
-
       - uses: actions/cache@v4
         with:
           path: ${{ env.HF_HOME }}
           key: ${{ runner.os }}-hf-${{ github.event.inputs.model_size || 'bolt-small' }}
-
       - name: Install dependencies
         run: pip install -r scripts/requirements.txt
 
-      - name: Run forecast
+      # Step 1: Chronos Forecast → Supabase
+      - name: Run Chronos forecast pipeline
         run: |
           python scripts/train_and_forecast.py \
             --config config/tickers.json \
             --output forecasts \
-            --model-size "${{ github.event.inputs.model_size || 'bolt-small' }}" \
+            --model-size "${{ github.event.inputs.model_size || 'bolt-small' }}"
 
-      - name: Show results
-        run: cat forecasts/AAPL.json | python -m json.tool
+      # Step 2: Portfolio Suggestion → Supabase
+      - name: Suggest portfolios
+        run: |
+          BUDGET="${{ github.event.inputs.budget || '100000' }}"
+          MIN="${{ github.event.inputs.target_return_min || '2.0' }}"
+          MAX="${{ github.event.inputs.target_return_max || '15.0' }}"
+          python scripts/suggest_portfolios.py \
+            --budget "$BUDGET" \
+            --target-return-min "$MIN" \
+            --target-return-max "$MAX" \
+            --strategies max_sharpe min_variance target_return equal_weight \
+            --output forecasts/suggestions.json
 
       - name: Commit results
         run: |
