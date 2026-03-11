@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-11T14:11:55.577825",
+  "generated_at": "2026-03-11T15:50:31.703677",
   "budget": 100000.0,
   "target_return_range": [
     2.0,
@@ -8,98 +8,98 @@
   "suggestions": [
     {
       "symbols": [
-        "NVDA",
+        "MSFT",
         "AAPL",
-        "AMZN",
         "GOOGL",
-        "MSFT"
+        "NVDA",
+        "AMZN"
       ],
       "weights": [
-        0.33050330400411854,
-        0.3410325654549146,
-        0.3284641305409008,
-        6.627278364725622e-14,
-        0.0
+        1.434645844318899e-14,
+        0.34102308149832344,
+        0.0,
+        0.33051274655789714,
+        0.328464171943765
       ],
       "shares": [
-        178,
-        130,
-        153,
         0,
-        0
+        130,
+        0,
+        178,
+        153
       ],
-      "expected_return": 6.439660765804724,
-      "expected_risk": 1.2789220680513764,
-      "sharpe_ratio": 18.02031241019448,
+      "expected_return": 6.439708125016717,
+      "expected_risk": 1.278936764499839,
+      "sharpe_ratio": 18.020260862765344,
       "total_value": 99589.44929504395,
       "strategy": "max_sharpe",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "NVDA",
+        "MSFT",
         "AAPL",
-        "AMZN",
         "GOOGL",
-        "MSFT"
+        "NVDA",
+        "AMZN"
       ],
       "weights": [
-        0.0663195040649268,
-        0.34314579680862445,
-        0.18206228145426712,
-        0.11568663175519946,
-        0.2927857859169822
+        0.2927906908753575,
+        0.3431391586019642,
+        0.1156869172595422,
+        0.06632061321739624,
+        0.18206262004574003
       ],
       "shares": [
-        35,
+        72,
         131,
-        84,
         37,
-        72
+        35,
+        84
       ],
-      "expected_return": 2.957701918435311,
-      "expected_risk": 1.0328787900611136,
-      "sharpe_ratio": 8.154246304268236,
+      "expected_return": 2.9576902312291007,
+      "expected_risk": 1.0328858631191513,
+      "sharpe_ratio": 8.154142941711685,
       "total_value": 99214.59956359863,
       "strategy": "min_variance",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "NVDA",
+        "MSFT",
         "AAPL",
-        "AMZN",
         "GOOGL",
-        "MSFT"
+        "NVDA",
+        "AMZN"
       ],
       "weights": [
-        0.39999999999998426,
-        0.20000000000003268,
-        0.3999999999999811,
-        2.0056993781820305e-15,
-        0.0
+        2.473668798763299e-14,
+        0.1999999999999986,
+        0.0,
+        0.40000000000000757,
+        0.3999999999999691
       ],
       "shares": [
-        216,
-        76,
-        186,
         0,
-        0
+        76,
+        0,
+        216,
+        186
       ],
-      "expected_return": 6.790466344354735,
-      "expected_risk": 1.3908712914967256,
-      "sharpe_ratio": 17.629207529433497,
+      "expected_return": 6.790475290999481,
+      "expected_risk": 1.3908733850095916,
+      "sharpe_ratio": 17.629208010379614,
       "total_value": 99598.78024291992,
       "strategy": "target_return",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "NVDA",
+        "MSFT",
         "AAPL",
-        "AMZN",
         "GOOGL",
-        "MSFT"
+        "NVDA",
+        "AMZN"
       ],
       "weights": [
         0.2,
@@ -109,15 +109,15 @@
         0.2
       ],
       "shares": [
-        108,
+        49,
         76,
-        93,
         65,
-        49
+        108,
+        93
       ],
-      "expected_return": 3.1843722479948293,
-      "expected_risk": 1.1529206518952486,
-      "sharpe_ratio": 8.130970180259133,
+      "expected_return": 3.184379395553343,
+      "expected_risk": 1.152925400228473,
+      "sharpe_ratio": 8.130962730679052,
       "total_value": 99550.7706451416,
       "strategy": "equal_weight",
       "portfolio_id": null
