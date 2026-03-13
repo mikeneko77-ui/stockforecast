@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-12T16:01:20.886014",
+  "generated_at": "2026-03-13T15:44:01.317586",
   "budget": 100000.0,
   "target_return_range": [
     2.0,
@@ -8,98 +8,98 @@
   "suggestions": [
     {
       "symbols": [
-        "AAPL",
-        "GOOGL",
         "AMZN",
-        "MSFT",
-        "NVDA"
+        "AAPL",
+        "NVDA",
+        "GOOGL",
+        "MSFT"
       ],
       "weights": [
-        0.20392473852833984,
+        0.40000000000000163,
+        0.20671556989114176,
+        0.39328443010885666,
         0.0,
-        0.4000000000000275,
-        0.0,
-        0.39607526147163263
+        0.0
       ],
       "shares": [
-        78,
+        190,
+        80,
+        214,
         0,
-        188,
-        0,
-        212
+        0
       ],
-      "expected_return": 5.955545139309407,
-      "expected_risk": 1.3746333662049541,
-      "sharpe_ratio": 15.286468450553992,
-      "total_value": 99759.73840332031,
+      "expected_return": 6.808167170702033,
+      "expected_risk": 1.6485544387153463,
+      "sharpe_ratio": 14.918707892122775,
+      "total_value": 99463.45919799805,
       "strategy": "max_sharpe",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "AAPL",
-        "GOOGL",
         "AMZN",
-        "MSFT",
-        "NVDA"
+        "AAPL",
+        "NVDA",
+        "GOOGL",
+        "MSFT"
       ],
       "weights": [
-        0.19382659702950825,
-        0.11629907397449674,
-        0.4000000000000001,
-        0.2453121241848523,
-        0.04456220481114268
+        0.4,
+        0.14497499739739134,
+        4.155067183196767e-17,
+        0.11542538940437708,
+        0.3395996131982316
       ],
       "shares": [
-        74,
-        37,
-        188,
-        60,
-        23
+        190,
+        56,
+        0,
+        38,
+        84
       ],
-      "expected_return": 2.9847324898651073,
-      "expected_risk": 1.1136791865677986,
-      "sharpe_ratio": 7.664573927230655,
-      "total_value": 99271.52938842773,
+      "expected_return": 3.128572729759441,
+      "expected_risk": 1.2990793094905242,
+      "sharpe_ratio": 7.035756321814273,
+      "total_value": 99424.39776611328,
       "strategy": "min_variance",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "AAPL",
-        "GOOGL",
         "AMZN",
-        "MSFT",
-        "NVDA"
+        "AAPL",
+        "NVDA",
+        "GOOGL",
+        "MSFT"
       ],
       "weights": [
-        0.199999999999936,
-        8.428746825217605e-14,
-        0.39999999999996405,
+        0.3999999999999445,
+        0.20000000000011015,
+        0.3999999999999391,
         0.0,
-        0.4000000000000156
+        6.147077782066349e-15
       ],
       "shares": [
-        76,
+        190,
+        78,
+        218,
         0,
-        188,
-        0,
-        215
+        0
       ],
-      "expected_return": 5.969842799521147,
-      "expected_risk": 1.3785991816136434,
-      "sharpe_ratio": 15.28605271025475,
-      "total_value": 99796.20840454102,
+      "expected_return": 6.833271366533677,
+      "expected_risk": 1.6557322770927128,
+      "sharpe_ratio": 14.917713497329261,
+      "total_value": 99684.49920654297,
       "strategy": "target_return",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "AAPL",
-        "GOOGL",
         "AMZN",
-        "MSFT",
-        "NVDA"
+        "AAPL",
+        "NVDA",
+        "GOOGL",
+        "MSFT"
       ],
       "weights": [
         0.2,
@@ -109,16 +109,16 @@
         0.2
       ],
       "shares": [
-        76,
-        64,
-        94,
-        49,
-        107
+        95,
+        78,
+        109,
+        65,
+        49
       ],
-      "expected_return": 2.9159639412224023,
-      "expected_risk": 1.2753496526056671,
-      "sharpe_ratio": 6.466500018750069,
-      "total_value": 99311.79013061523,
+      "expected_return": 3.7419212417537553,
+      "expected_risk": 1.5309544559817732,
+      "sharpe_ratio": 7.652787559305409,
+      "total_value": 99238.77787780762,
       "strategy": "equal_weight",
       "portfolio_id": null
     }
