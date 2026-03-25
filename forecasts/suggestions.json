@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-03-24T16:07:57.891655",
+  "generated_at": "2026-03-25T16:11:32.392474",
   "budget": 100000.0,
   "target_return_range": [
     2.0,
@@ -8,98 +8,98 @@
   "suggestions": [
     {
       "symbols": [
-        "NVDA",
-        "AAPL",
         "GOOGL",
+        "AAPL",
+        "AMZN",
         "MSFT",
-        "AMZN"
+        "NVDA"
       ],
       "weights": [
-        0.26090727148030607,
-        0.40000000000000074,
-        8.798796740235547e-16,
         0.0,
-        0.33909272851969224
+        0.3999999999999599,
+        0.3999999999999422,
+        0.09010277036059736,
+        0.10989722963950053
       ],
       "shares": [
-        148,
-        159,
         0,
-        0,
-        161
+        158,
+        193,
+        24,
+        62
       ],
-      "expected_return": 5.628030483839621,
-      "expected_risk": 1.6055698369117883,
-      "sharpe_ratio": 12.231002089996428,
-      "total_value": 99814.17068481445,
+      "expected_return": 4.489371650146005,
+      "expected_risk": 1.1602134629164973,
+      "sharpe_ratio": 12.803989441727404,
+      "total_value": 99564.60054016113,
       "strategy": "max_sharpe",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "NVDA",
-        "AAPL",
         "GOOGL",
+        "AAPL",
+        "AMZN",
         "MSFT",
-        "AMZN"
+        "NVDA"
       ],
       "weights": [
-        5.540255124141977e-17,
-        0.21594599408481707,
-        0.2601366493985621,
-        0.32291096882997145,
-        0.20100638768664938
+        0.0805977368900734,
+        0.28517296970332584,
+        0.39628786223006784,
+        0.21427185347013716,
+        0.02366957770639585
       ],
       "shares": [
-        0,
-        85,
-        86,
-        84,
-        95
+        27,
+        113,
+        191,
+        57,
+        13
       ],
-      "expected_return": 2.1691294957368634,
-      "expected_risk": 1.3100254118157113,
-      "sharpe_ratio": 3.9009501919674454,
-      "total_value": 99489.11019897461,
+      "expected_return": 3.4373101011861955,
+      "expected_risk": 1.0931084473235395,
+      "sharpe_ratio": 9.54772826939666,
+      "total_value": 99383.8204498291,
       "strategy": "min_variance",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "NVDA",
-        "AAPL",
         "GOOGL",
+        "AAPL",
+        "AMZN",
         "MSFT",
-        "AMZN"
+        "NVDA"
       ],
       "weights": [
-        0.3999999999996786,
-        0.3999999999996655,
+        3.762056257057491e-15,
+        0.3999999999999624,
+        0.3999999999999624,
         0.0,
-        0.0,
-        0.200000000000656
+        0.20000000000007143
       ],
       "shares": [
-        227,
-        159,
         0,
+        158,
+        193,
         0,
-        95
+        114
       ],
-      "expected_return": 5.717510554046815,
-      "expected_risk": 1.6607322651921823,
-      "sharpe_ratio": 12.05103600698426,
-      "total_value": 99820.49067687988,
+      "expected_return": 4.629413169087589,
+      "expected_risk": 1.2251741194014438,
+      "sharpe_ratio": 12.605175920996652,
+      "total_value": 99729.24061584473,
       "strategy": "target_return",
       "portfolio_id": null
     },
     {
       "symbols": [
-        "NVDA",
-        "AAPL",
         "GOOGL",
+        "AAPL",
+        "AMZN",
         "MSFT",
-        "AMZN"
+        "NVDA"
       ],
       "weights": [
         0.2,
@@ -109,16 +109,16 @@
         0.2
       ],
       "shares": [
-        113,
+        68,
         79,
-        66,
-        52,
-        95
+        96,
+        53,
+        114
       ],
-      "expected_return": 3.1070133463703677,
-      "expected_risk": 1.3936314565275172,
-      "sharpe_ratio": 6.493435557672145,
-      "total_value": 99530.29014587402,
+      "expected_return": 2.2957204859369167,
+      "expected_risk": 1.2034952439778637,
+      "sharpe_ratio": 4.688033516292004,
+      "total_value": 99252.53977966309,
       "strategy": "equal_weight",
       "portfolio_id": null
     }
