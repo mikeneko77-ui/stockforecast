@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-04-01T16:08:07.194438",
+  "generated_at": "2026-04-02T16:02:39.081790",
   "budget": 100000.0,
   "target_return_range": [
     2.0,
@@ -9,97 +9,68 @@
     {
       "symbols": [
         "AMZN",
-        "GOOGL",
+        "MSFT",
         "NVDA",
-        "AAPL",
-        "MSFT"
+        "GOOGL",
+        "AAPL"
       ],
       "weights": [
-        0.40000000000002306,
-        0.0,
-        0.09137964560663928,
-        0.40000000000002306,
-        0.10862035439331459
+        0.3999999999999799,
+        7.521760991835436e-15,
+        0.19999999999999393,
+        1.8623991238087e-14,
+        0.3999999999999999
       ],
       "shares": [
-        192,
+        189,
         0,
-        52,
-        157,
-        29
+        113,
+        0,
+        156
       ],
-      "expected_return": 3.660786539264434,
-      "expected_risk": 1.4392401044602112,
-      "sharpe_ratio": 7.90368711160017,
-      "total_value": 99636.59983825684,
+      "expected_return": 4.6867867006092405,
+      "expected_risk": 1.2140143519459219,
+      "sharpe_ratio": 12.919537661252889,
+      "total_value": 99535.7621459961,
       "strategy": "max_sharpe",
       "portfolio_id": null
     },
     {
       "symbols": [
         "AMZN",
-        "GOOGL",
+        "MSFT",
         "NVDA",
-        "AAPL",
-        "MSFT"
+        "GOOGL",
+        "AAPL"
       ],
       "weights": [
-        0.4,
-        0.07722443730227087,
-        0.07045095033360682,
-        0.33103882422022035,
-        0.12128578814390198
+        0.40000000000000013,
+        0.06690747159186629,
+        0.0539149118894928,
+        0.07917761651864079,
+        0.4000000000000001
       ],
       "shares": [
-        192,
+        189,
+        18,
+        30,
         26,
-        40,
-        130,
-        32
+        156
       ],
-      "expected_return": 3.2985703990736166,
-      "expected_risk": 1.422674040885949,
-      "sharpe_ratio": 6.926390298989446,
-      "total_value": 99278.54006958008,
+      "expected_return": 4.046142014654224,
+      "expected_risk": 1.1646444067520372,
+      "sharpe_ratio": 11.156878773555597,
+      "total_value": 99329.31243896484,
       "strategy": "min_variance",
       "portfolio_id": null
     },
     {
       "symbols": [
         "AMZN",
-        "GOOGL",
+        "MSFT",
         "NVDA",
-        "AAPL",
-        "MSFT"
-      ],
-      "weights": [
-        0.3999999999998926,
-        1.5359048257244582e-13,
-        3.34262523125954e-13,
-        0.39999999999966074,
-        0.19999999999995882
-      ],
-      "shares": [
-        192,
-        0,
-        0,
-        157,
-        54
-      ],
-      "expected_return": 3.6669758676739947,
-      "expected_risk": 1.4685827308526114,
-      "sharpe_ratio": 7.763470456196368,
-      "total_value": 99822.05049133301,
-      "strategy": "target_return",
-      "portfolio_id": null
-    },
-    {
-      "symbols": [
-        "AMZN",
         "GOOGL",
-        "NVDA",
-        "AAPL",
-        "MSFT"
+        "AAPL"
       ],
       "weights": [
         0.2,
@@ -109,16 +80,45 @@
         0.2
       ],
       "shares": [
-        96,
-        69,
-        114,
-        78,
-        54
+        94,
+        54,
+        113,
+        67,
+        78
       ],
-      "expected_return": 2.2944257196598286,
-      "expected_risk": 1.5427752457451984,
-      "sharpe_ratio": 3.6535380236045434,
-      "total_value": 99501.95974731445,
+      "expected_return": 3.2101597740926096,
+      "expected_risk": 1.4413793108277884,
+      "sharpe_ratio": 6.578886611800433,
+      "total_value": 99463.58178710938,
+      "strategy": "target_return",
+      "portfolio_id": null
+    },
+    {
+      "symbols": [
+        "AMZN",
+        "MSFT",
+        "NVDA",
+        "GOOGL",
+        "AAPL"
+      ],
+      "weights": [
+        0.2,
+        0.2,
+        0.2,
+        0.2,
+        0.2
+      ],
+      "shares": [
+        94,
+        54,
+        113,
+        67,
+        78
+      ],
+      "expected_return": 3.2101597740926096,
+      "expected_risk": 1.4413793108277884,
+      "sharpe_ratio": 6.578886611800433,
+      "total_value": 99463.58178710938,
       "strategy": "equal_weight",
       "portfolio_id": null
     }
